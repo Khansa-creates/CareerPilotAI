@@ -1,5 +1,7 @@
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 function Signup() {
+    const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-slate-950 to-black text-white flex items-center justify-center p-6">
       <div className="w-full max-w-lg rounded-3xl border border-white/10 bg-slate-900/60 p-10 backdrop-blur-xl shadow-[0_0_80px_rgba(59,130,246,0.15)]">
@@ -52,6 +54,7 @@ function Signup() {
 
           <button
             type="button"
+             onClick={() => navigate("/onboarding")}
             className="w-full rounded-xl bg-blue-600 py-4 font-semibold transition-all hover:bg-blue-500"
           >
             Create Account
