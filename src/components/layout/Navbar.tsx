@@ -2,7 +2,7 @@ import Button from "../ui/Button";
 
 function Navbar() {
   return (
-    <nav className="fixed top-0 w-full border-b border-white/10 bg-black/40 backdrop-blur-xl">
+    <nav className="fixed top-0 left-0 right-0 z-50 w-full border-b border-white/10 bg-black/40 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-8 py-5">
         <h1 className="text-2xl font-bold text-white">
           CareerPilot AI
