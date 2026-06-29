@@ -40,6 +40,8 @@ const [formData, setFormData] = useState({
             <StepTwo
               next={() => setStep(3)}
               back={() => setStep(1)}
+              formData={formData}
+              setFormData={setFormData}
             />
           )}
 
@@ -47,6 +49,7 @@ const [formData, setFormData] = useState({
             <StepThree
               back={() => setStep(2)}
               formData={formData}
+              setFormData={setFormData}
             />
           )}
         </div>

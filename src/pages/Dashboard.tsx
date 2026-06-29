@@ -12,7 +12,7 @@ function Dashboard() {
           Welcome back,
           <span className="text-blue-400">
             {" "}
-            {user?.fullName || "Student"} 👋
+            {user?.fullName || "Student"} 
           </span>
         </h1>
 
