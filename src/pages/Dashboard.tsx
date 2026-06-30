@@ -1,5 +1,7 @@
+import { getSkillGap } from "../utils/getSkillGap";
 import { getDailyMissions } from "../utils/getDailyMissions";
 import { calculateReadiness } from "../utils/calculateReadiness";
+import { skillInfo } from "../data/skillInfo";
 
 function Dashboard() {
   const userData = localStorage.getItem("careerpilot-user");
@@ -14,6 +16,12 @@ function Dashboard() {
  const missions = getDailyMissions(
   user?.targetRole || ""
  );
+
+ const skillGap =
+  getSkillGap(
+    user?.targetRole || "",
+    user?.skills || ""
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-slate-950 to-black p-8 text-white">
@@ -102,6 +110,59 @@ function Dashboard() {
            ))}
        </div>
      </div>
+
+     <div className="mt-8 rounded-3xl border border-white/10 bg-slate-900/60 p-8">
+       <h2 className="text-2xl font-bold">
+          Skill Gap Analysis 🧠
+      </h2>
+
+       <p className="mt-2 text-gray-400">
+          Skills recommended for your target role.
+       </p>
+
+      <div className="mt-6 space-y-3">
+        {skillGap.length === 0 ? (
+           <p className="text-green-400">
+             🎉 You currently meet all the tracked
+             skill requirements.
+      </p>
+    ) : (
+      skillGap.map((skill) => (
+        <div
+          key={skill}
+          className="rounded-xl bg-black/30 p-4"
+        >
+          <div
+             key={skill}
+             className="rounded-xl bg-black/30 p-5"
+          >
+             <h3 className="font-semibold text-lg">
+               🚀 {skill}
+             </h3>
+
+              <p className="mt-2 text-gray-400">
+                Level:
+               {" "}
+               {skillInfo[skill]?.level}
+             </p>
+
+              <p className="text-gray-400">
+                 Estimated Time:
+                 {" "}
+                 {skillInfo[skill]?.duration}
+             </p>
+
+              <p className="text-blue-400">
+                Resource:
+                {" "}
+               {skillInfo[skill]?.resource}
+               </p>
+          </div>
+       </div>
+      ))
+    )}
+  </div>
+</div>
 
         {/* User Cards */}
         <div className="mt-10 grid gap-6 md:grid-cols-2">

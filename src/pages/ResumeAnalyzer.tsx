@@ -1,0 +1,183 @@
+import { useState } from "react";
+import { extractPdfText } from "../utils/extractPdfText";
+import { extractSkills } from "../utils/extractSkills";
+import { roleSkills } from "../data/roleSkills";
+import { calculateATS } from "../utils/calculateATS";
+import { getMissingSkills } from "../utils/getMissingSkills";
+
+function ResumeAnalyzer() {
+  const [fileName, setFileName] =
+    useState("");
+
+  const [uploading, setUploading] =
+    useState(false);
+
+  const [resumeText, setResumeText] =
+    useState("");
+
+  const extractedSkills =
+    extractSkills(resumeText);
+
+  const userData =
+    localStorage.getItem(
+      "careerpilot-user"
+    );
+
+  const user = userData
+    ? JSON.parse(userData)
+    : null;
+
+  const targetRole =
+    user?.targetRole?.toLowerCase() ||
+    "";
+
+  const requiredSkills =
+    roleSkills[targetRole] || [];
+
+  const missingSkills =
+    getMissingSkills(
+      extractedSkills,
+      requiredSkills
+    );
+
+  const atsScore =
+    calculateATS(
+      extractedSkills,
+      requiredSkills
+    );
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-black via-slate-950 to-black p-8 text-white">
+      <div className="mx-auto max-w-4xl">
+        <h1 className="text-5xl font-bold">
+          Resume Analyzer 📄
+        </h1>
+
+        <p className="mt-4 text-gray-400">
+          Upload your resume and get
+          personalized feedback.
+        </p>
+
+        <div className="mt-12 rounded-3xl border border-white/10 bg-slate-900/60 p-10">
+          <label className="flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-white/20 p-12 transition hover:border-blue-500">
+            <p className="text-xl font-semibold">
+              Upload Resume PDF
+            </p>
+
+            <p className="mt-2 text-gray-400">
+              Click to select a file
+            </p>
+
+            <input
+              type="file"
+              accept=".pdf"
+              className="hidden"
+              onChange={async (e) => {
+                const file =
+                  e.target.files?.[0];
+
+                if (!file) return;
+
+                setFileName(file.name);
+                setUploading(true);
+
+                try {
+                  const text =
+                    await extractPdfText(
+                      file
+                    );
+
+                  setResumeText(text);
+                } catch (error) {
+                  console.error(error);
+                }
+
+                setUploading(false);
+              }}
+            />
+          </label>
+
+          {fileName && (
+            <div className="mt-6 rounded-xl bg-black/40 p-4">
+              ✅ Uploaded: {fileName}
+
+              {uploading && (
+                <p className="mt-4 text-blue-400">
+                  Extracting text...
+                </p>
+              )}
+            </div>
+          )}
+
+          {resumeText && (
+            <div className="mt-8 rounded-xl bg-black/40 p-6">
+              <h2 className="mb-4 text-2xl font-bold">
+                Extracted Text 📄
+              </h2>
+
+              <pre className="whitespace-pre-wrap text-gray-300">
+                {resumeText}
+              </pre>
+            </div>
+          )}
+
+          {extractedSkills.length > 0 && (
+            <div className="mt-8 rounded-xl bg-black/40 p-6">
+              <h2 className="mb-4 text-2xl font-bold">
+                Skills Found 🚀
+              </h2>
+
+              <div className="flex flex-wrap gap-3">
+                {extractedSkills.map(
+                  (skill) => (
+                    <div
+                      key={skill}
+                      className="rounded-full bg-blue-600 px-4 py-2"
+                    >
+                      {skill}
+                    </div>
+                  )
+                )}
+              </div>
+            </div>
+          )}
+
+          {requiredSkills.length > 0 && (
+            <div className="mt-8 rounded-xl bg-black/40 p-6">
+              <h2 className="text-2xl font-bold">
+                ATS Score 🎯
+              </h2>
+
+              <p className="mt-4 text-5xl font-bold text-blue-400">
+                {atsScore}%
+              </p>
+            </div>
+          )}
+
+          {missingSkills.length > 0 && (
+            <div className="mt-8 rounded-xl bg-black/40 p-6">
+              <h2 className="text-2xl font-bold">
+                Missing Skills 📚
+              </h2>
+
+              <div className="mt-4 flex flex-wrap gap-3">
+                {missingSkills.map(
+                  (skill) => (
+                    <div
+                      key={skill}
+                      className="rounded-full bg-red-600 px-4 py-2"
+                    >
+                      {skill}
+                    </div>
+                  )
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default ResumeAnalyzer;

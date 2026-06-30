@@ -9,11 +9,16 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import OnboardingPage from "./pages/Onboarding";
+import ResumeAnalyzer from "./pages/ResumeAnalyzer";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route
+         path="/resume-analyzer"
+         element={<ResumeAnalyzer />}
+        />
         <Route
           path="/"
           element={<Home />}
