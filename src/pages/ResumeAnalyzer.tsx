@@ -4,6 +4,7 @@ import { extractSkills } from "../utils/extractSkills";
 import { roleSkills } from "../data/roleSkills";
 import { calculateATS } from "../utils/calculateATS";
 import { getMissingSkills } from "../utils/getMissingSkills";
+import { getCareerAdvice } from "../utils/getCareerAdvice";
 
 function ResumeAnalyzer() {
   const [fileName, setFileName] =
@@ -45,6 +46,13 @@ function ResumeAnalyzer() {
       extractedSkills,
       requiredSkills
     );
+
+    const recommendations =
+  getCareerAdvice(
+    targetRole,
+    missingSkills,
+    atsScore
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-slate-950 to-black p-8 text-white">
@@ -121,7 +129,7 @@ function ResumeAnalyzer() {
             </div>
           )}
 
-          {extractedSkills.length > 0 && (
+          {resumeText && extractedSkills.length > 0 && (
             <div className="mt-8 rounded-xl bg-black/40 p-6">
               <h2 className="mb-4 text-2xl font-bold">
                 Skills Found 🚀
@@ -142,7 +150,7 @@ function ResumeAnalyzer() {
             </div>
           )}
 
-          {requiredSkills.length > 0 && (
+          {resumeText && requiredSkills.length > 0 && (
             <div className="mt-8 rounded-xl bg-black/40 p-6">
               <h2 className="text-2xl font-bold">
                 ATS Score 🎯
@@ -154,7 +162,7 @@ function ResumeAnalyzer() {
             </div>
           )}
 
-          {missingSkills.length > 0 && (
+          {resumeText && missingSkills.length > 0 && (
             <div className="mt-8 rounded-xl bg-black/40 p-6">
               <h2 className="text-2xl font-bold">
                 Missing Skills 📚
@@ -174,6 +182,28 @@ function ResumeAnalyzer() {
               </div>
             </div>
           )}
+
+          {resumeText && recommendations.length > 0 && (
+             <div className="mt-8 rounded-xl bg-black/40 p-6">
+               <h2 className="text-2xl font-bold">
+                  AI Career Coach 🤖
+              </h2>
+
+              <div className="mt-4 space-y-3">
+                {recommendations.map(
+                  (item, index) => (
+                <div
+                    key={index}
+                  className="rounded-lg bg-slate-900 p-4"
+                >
+                   🚀 {item}
+                </div>
+                )
+            )}
+        </div>
+     </div>
+     )}
+
         </div>
       </div>
     </div>
