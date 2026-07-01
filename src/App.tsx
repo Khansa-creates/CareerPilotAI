@@ -10,6 +10,7 @@ import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import OnboardingPage from "./pages/Onboarding";
 import ResumeAnalyzer from "./pages/ResumeAnalyzer";
+import AIMentor from "./pages/AIMentor";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
          path="/resume-analyzer"
          element={<ResumeAnalyzer />}
         />
+        
         <Route
           path="/"
           element={<Home />}
@@ -43,6 +45,12 @@ function App() {
           path="/onboarding"
           element={<OnboardingPage />}
         />
+
+        <Route
+         path="/ai-mentor"
+         element={<AIMentor />}
+        />
+
       </Routes>
     </BrowserRouter>
   );

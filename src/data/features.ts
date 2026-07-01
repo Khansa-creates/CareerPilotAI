@@ -17,12 +17,12 @@ export const features = [
       "Personalized weekly plans that adapt to your progress.",
     link: "/dashboard",
   },
-  {
-    title: "🤖 AI Mentor",
-    description:
-      "Daily missions, reminders and career guidance.",
-    link: "/dashboard",
-  },
+ {
+   title: "🤖 AI Mentor",
+   description:
+     "Daily missions, reminders and career guidance.",
+   link: "/ai-mentor",
+ },
   {
     title: "💼 Interview Simulator",
     description:
