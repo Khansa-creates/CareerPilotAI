@@ -7,6 +7,7 @@ import { getMissingSkills } from "../utils/getMissingSkills";
 import { getCareerAdvice } from "../utils/getCareerAdvice";
 import { getResumeSuggestions } from "../utils/getResumeSuggestions";
 import { downloadReport } from "../utils/downloadReport";
+import { generateRoadmap } from "../utils/generateRoadmap";
 
 function ResumeAnalyzer() {
   const [fileName, setFileName] =
@@ -59,6 +60,11 @@ function ResumeAnalyzer() {
    const suggestions =
    getResumeSuggestions(
     resumeText
+   );
+
+   const roadmap =
+   generateRoadmap(
+    missingSkills
    );
 
   return (
@@ -232,6 +238,42 @@ function ResumeAnalyzer() {
            </div>
          </div>
         )}
+
+        {resumeText &&
+          roadmap.length > 0 && (
+           <div className="mt-8 rounded-xl bg-black/40 p-6">
+             <h2 className="text-2xl font-bold">
+                Learning Roadmap 🗺️
+             </h2>
+
+             <div className="mt-6 space-y-6">
+               {roadmap.map(
+                (item, index) => (
+                  <div
+                     key={index}
+                     className="rounded-xl bg-slate-900 p-5"
+                    >
+                      <h3 className="text-xl font-semibold text-blue-400">
+                       {item.week}
+                      </h3>
+
+                       <ul className="mt-3 space-y-2">
+                        {item.tasks.map(
+                          (task) => (
+                            <li
+                               key={task}
+                              >
+                                 ✅ {task}
+                              </li>
+                            )
+                         )}
+                      </ul>
+                   </div>
+                  )
+               )}
+          </div>
+       </div>
+      )}
 
         {resumeText && (
            <div className="mt-8">
