@@ -6,6 +6,7 @@ import { calculateATS } from "../utils/calculateATS";
 import { getMissingSkills } from "../utils/getMissingSkills";
 import { getCareerAdvice } from "../utils/getCareerAdvice";
 import { getResumeSuggestions } from "../utils/getResumeSuggestions";
+import { downloadReport } from "../utils/downloadReport";
 
 function ResumeAnalyzer() {
   const [fileName, setFileName] =
@@ -230,6 +231,25 @@ function ResumeAnalyzer() {
               )}
            </div>
          </div>
+        )}
+
+        {resumeText && (
+           <div className="mt-8">
+             <button
+               onClick={() =>
+                downloadReport(
+                  atsScore,
+                  extractedSkills,
+                  missingSkills,
+                  recommendations,
+                  suggestions
+                )
+              }
+              className="rounded-xl bg-blue-600 px-8 py-4 font-semibold hover:bg-blue-500"
+            >
+              Download Report 📄
+            </button>
+          </div>
         )}
 
         </div>
