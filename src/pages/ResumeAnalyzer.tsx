@@ -9,6 +9,7 @@ import { getResumeSuggestions } from "../utils/getResumeSuggestions";
 import { downloadReport } from "../utils/downloadReport";
 import { generateRoadmap } from "../utils/generateRoadmap";
 import { checkResumeSections } from "../utils/checkResumeSections";
+import { getCompanyMatches } from "../utils/getCompanyMatches";
 
 function ResumeAnalyzer() {
   const [fileName, setFileName] =
@@ -19,6 +20,20 @@ function ResumeAnalyzer() {
 
   const [resumeText, setResumeText] =
     useState("");
+
+    const [
+  completedTasks,
+  setCompletedTasks,
+] = useState<string[]>(() => {
+  const saved =
+    localStorage.getItem(
+      "careerpilot-progress"
+    );
+
+  return saved
+    ? JSON.parse(saved)
+    : [];
+});
 
   const extractedSkills =
     extractSkills(resumeText);
@@ -70,16 +85,76 @@ function ResumeAnalyzer() {
     resumeText
    );
 
+   function toggleTask(
+  taskId: string
+) {
+  let updated;
+
+  if (
+    completedTasks.includes(
+      taskId
+    )
+  ) {
+    updated =
+      completedTasks.filter(
+        (id) => id !== taskId
+      );
+  } else {
+    updated = [
+      ...completedTasks,
+      taskId,
+    ];
+  }
+
+  setCompletedTasks(updated);
+
+  localStorage.setItem(
+    "careerpilot-progress",
+    JSON.stringify(updated)
+  );
+}
+
    const roadmap =
    generateRoadmap(
     missingSkills
    );
+
+   const totalTasks =
+  roadmap.flatMap(
+    (week) => week.tasks
+  ).length;
+
+const completedCount =
+  roadmap
+    .flatMap(
+      (week) => week.tasks
+    )
+    .filter((task) =>
+      completedTasks.includes(
+        task.id
+      )
+    ).length;
+
+const progress =
+  totalTasks === 0
+    ? 0
+    : Math.round(
+        (completedCount /
+          totalTasks) *
+          100
+      );
 
    const sections =
    checkResumeSections(
     resumeText
   );
 
+   const companyMatches =
+   getCompanyMatches(
+    extractedSkills,
+    atsScore,
+    sections
+  );
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-slate-950 to-black p-8 text-white">
       <div className="mx-auto max-w-4xl">
@@ -311,6 +386,27 @@ function ResumeAnalyzer() {
                 Learning Roadmap 🗺️
              </h2>
 
+             <div className="mb-6 mt-4">
+  <div className="flex justify-between">
+    <span>
+      Progress
+    </span>
+
+    <span>
+      {progress}%
+    </span>
+  </div>
+
+  <div className="mt-2 h-3 rounded-full bg-slate-700">
+    <div
+      className="h-3 rounded-full bg-green-500"
+      style={{
+        width: `${progress}%`,
+      }}
+    />
+  </div>
+</div>
+
              <div className="mt-6 space-y-6">
                {roadmap.map(
                 (item, index) => (
@@ -323,15 +419,30 @@ function ResumeAnalyzer() {
                       </h3>
 
                        <ul className="mt-3 space-y-2">
-                        {item.tasks.map(
-                          (task) => (
-                            <li
-                               key={task}
-                              >
-                                 ✅ {task}
-                              </li>
-                            )
-                         )}
+                       {item.tasks.map(
+  (task) => (
+    <div
+      key={task.id}
+      className="flex items-center gap-3"
+    >
+      <input
+        type="checkbox"
+        checked={completedTasks.includes(
+          task.id
+        )}
+        onChange={() =>
+          toggleTask(
+            task.id
+          )
+        }
+      />
+
+      <span>
+        {task.title}
+      </span>
+    </div>
+  )
+)}
                       </ul>
                    </div>
                   )
@@ -361,6 +472,65 @@ function ResumeAnalyzer() {
          </div>
         </div>
       )}
+
+      {resumeText && (
+        <div className="mt-8 rounded-xl bg-black/40 p-6">
+           <h2 className="text-2xl font-bold">
+              Company Matches 🏢
+           </h2>
+
+             <div className="mt-6 space-y-4">
+               {companyMatches.map(
+                 (company) => (
+                   <div
+                      key={company.name}
+                      className="rounded-xl bg-slate-900 p-4"
+                    >
+                    <div className="flex items-center justify-between">
+                       <h3 className="font-semibold">
+                         {company.name}
+                       </h3>
+
+                       <span className="text-blue-400">
+                         {company.score}%
+                       </span>
+                     </div>
+
+                      <div className="mt-3 h-3 rounded-full bg-slate-700">
+                         <div
+                            className="h-3 rounded-full bg-blue-500"
+                           style={{
+                             width: `${company.score}%`,
+                           }}
+                         />
+                      </div>
+                      {company.missingSkills.length >
+                        0 && (
+                       <div className="mt-4">
+                        <p className="text-sm text-gray-400">
+                          Missing:
+                       </p>
+
+                       <div className="mt-2 flex flex-wrap gap-2">
+                         {company.missingSkills.map(
+                            (skill: string) => (
+                              <span
+                                key={skill}
+                                className="rounded-full bg-red-600 px-3 py-1 text-sm"
+                              >
+                                {skill}
+                              </span>
+                            )
+                          )}
+                       </div>
+                     </div>
+                    )}
+                   </div>
+                  )
+                )}
+             </div>
+           </div>
+          )}
 
         {resumeText && (
            <div className="mt-8">

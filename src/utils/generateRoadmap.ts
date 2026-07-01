@@ -8,10 +8,18 @@ export function generateRoadmap(
   ) {
     roadmap.push({
       week: "Week 1",
-      tasks: [
-        "Learn Excel Basics",
-        "Practice formulas and pivot tables",
-      ],
+    tasks: [
+  {
+    id: "excel-1",
+    title: "Learn Excel Basics",
+  },
+  {
+    id: "excel-2",
+    title:
+      "Practice formulas and pivot tables",
+  },
+]
+      
     });
   }
 
@@ -21,8 +29,14 @@ export function generateRoadmap(
     roadmap.push({
       week: "Week 2",
       tasks: [
-        "Practice 20 SQL queries",
-        "Learn joins and aggregations",
+        {
+            id: "sql-1",
+            title: "Practice 20 SQL queries",
+        },
+        {
+           id: "sql-2",
+           title: "Learn joins and aggregations",
+        }
       ],
     });
   }
@@ -33,8 +47,14 @@ export function generateRoadmap(
     roadmap.push({
       week: "Week 3",
       tasks: [
-        "Learn Python fundamentals",
-        "Build a mini data project",
+      {
+        id: "python-1",
+        title: "Learn Python fundamentals",
+      },
+      {
+        id: "python-2",
+        title: "Build a mini data project",
+      }
       ],
     });
   }
@@ -47,8 +67,14 @@ export function generateRoadmap(
     roadmap.push({
       week: "Week 4",
       tasks: [
-        "Learn Power BI",
-        "Build an interactive dashboard",
+        {
+            id: "power bi-1",
+            title: "Learn Power BI",
+        },
+        {
+            id: "powerbi-2",
+            title: "Build an interactive dashboard",
+        }
       ],
     });
   }
@@ -61,8 +87,14 @@ export function generateRoadmap(
     roadmap.push({
       week: "Week 5",
       tasks: [
-        "Study statistics basics",
-        "Learn probability and distributions",
+        {
+            id: "statistics-1",
+            title: "Study statistics basics",
+        },
+        {
+            id: "statistics-2",
+            title: "Learn probability and distributions",
+        }
       ],
     });
   }
