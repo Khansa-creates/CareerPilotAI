@@ -5,6 +5,7 @@ import { roleSkills } from "../data/roleSkills";
 import { calculateATS } from "../utils/calculateATS";
 import { getMissingSkills } from "../utils/getMissingSkills";
 import { getCareerAdvice } from "../utils/getCareerAdvice";
+import { getResumeSuggestions } from "../utils/getResumeSuggestions";
 
 function ResumeAnalyzer() {
   const [fileName, setFileName] =
@@ -48,11 +49,16 @@ function ResumeAnalyzer() {
     );
 
     const recommendations =
-  getCareerAdvice(
+   getCareerAdvice(
     targetRole,
     missingSkills,
     atsScore
-  );
+   );
+
+   const suggestions =
+   getResumeSuggestions(
+    resumeText
+   );
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-slate-950 to-black p-8 text-white">
@@ -203,6 +209,28 @@ function ResumeAnalyzer() {
         </div>
      </div>
      )}
+
+     {resumeText &&
+      suggestions.length > 0 && (
+         <div className="mt-8 rounded-xl bg-black/40 p-6">
+            <h2 className="text-2xl font-bold">
+              Resume Suggestions 💡
+            </h2>
+
+             <div className="mt-4 space-y-3">
+               {suggestions.map(
+                 (item, index) => (
+                 <div
+                   key={index}
+                   className="rounded-lg bg-slate-900 p-4"
+                  >
+                    ❌ {item}
+                  </div>
+                )
+              )}
+           </div>
+         </div>
+        )}
 
         </div>
       </div>
