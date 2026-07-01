@@ -11,6 +11,7 @@ import Dashboard from "./pages/Dashboard";
 import OnboardingPage from "./pages/Onboarding";
 import ResumeAnalyzer from "./pages/ResumeAnalyzer";
 import AIMentor from "./pages/AIMentor";
+import InterviewSimulator from "./pages/InterviewSimulator";
 
 function App() {
   return (
@@ -20,7 +21,7 @@ function App() {
          path="/resume-analyzer"
          element={<ResumeAnalyzer />}
         />
-        
+
         <Route
           path="/"
           element={<Home />}
@@ -49,6 +50,11 @@ function App() {
         <Route
          path="/ai-mentor"
          element={<AIMentor />}
+        />
+
+        <Route
+         path="/interview-simulator"
+         element={ <InterviewSimulator /> }
         />
 
       </Routes>

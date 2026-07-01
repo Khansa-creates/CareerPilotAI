@@ -27,7 +27,7 @@ export const features = [
     title: "💼 Interview Simulator",
     description:
       "Practice technical and HR interviews with AI.",
-    link: "/dashboard",
+    link: "/interview-simulator" ,
   },
   {
     title: "🏢 Company Match",
