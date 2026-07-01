@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { extractPdfText } from "../utils/extractPdfText";
 import { extractSkills } from "../utils/extractSkills";
-import { roleSkills } from "../data/roleSkills";
+import { roleData } from "../data/roleData";
 import { calculateATS } from "../utils/calculateATS";
 import { getMissingSkills } from "../utils/getMissingSkills";
 import { getCareerAdvice } from "../utils/getCareerAdvice";
 import { getResumeSuggestions } from "../utils/getResumeSuggestions";
 import { downloadReport } from "../utils/downloadReport";
 import { generateRoadmap } from "../utils/generateRoadmap";
+import { checkResumeSections } from "../utils/checkResumeSections";
 
 function ResumeAnalyzer() {
   const [fileName, setFileName] =
@@ -36,7 +37,14 @@ function ResumeAnalyzer() {
     "";
 
   const requiredSkills =
-    roleSkills[targetRole] || [];
+    roleData[
+      targetRole as keyof typeof roleData
+    ]?.skills || [];
+
+  const suggestedProjects =
+    roleData[
+      targetRole as keyof typeof roleData 
+    ]?.projects || [];
 
   const missingSkills =
     getMissingSkills(
@@ -66,6 +74,11 @@ function ResumeAnalyzer() {
    generateRoadmap(
     missingSkills
    );
+
+   const sections =
+   checkResumeSections(
+    resumeText
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-slate-950 to-black p-8 text-white">
@@ -163,7 +176,59 @@ function ResumeAnalyzer() {
             </div>
           )}
 
-          {resumeText && requiredSkills.length > 0 && (
+          {resumeText && (
+            <div className="mt-8 rounded-xl bg-black/40 p-6">
+              <h2 className="text-2xl font-bold">
+                Resume Sections 📑
+              </h2>
+
+                  <div className="mt-4 space-y-3">
+                    <div>
+                       {sections.education
+                         ? "✅"
+                         : "❌"}{" "}
+                        Education
+                    </div>
+
+                     <div>
+                      {sections.skills
+                         ? "✅"
+                         : "❌"}{" "}
+                       Skills
+                     </div>
+
+                     <div>
+                       {sections.projects
+                         ? "✅"
+                         : "❌"}{" "}
+                       Projects
+                     </div>
+
+                      <div>
+                        {sections.experience
+                          ? "✅"
+                          : "❌"}{" "}
+                        Experience
+                      </div>
+
+                       <div>
+                          {sections.certifications
+                             ? "✅"
+                             : "❌"}{" "}
+                           Certifications
+                       </div>
+
+                        <div>
+                          {sections.summary
+                           ? "✅"
+                           : "❌"}{" "}
+                         Professional Summary
+                       </div>
+                   </div>
+                </div>
+              )}
+
+           {resumeText && requiredSkills.length > 0 && (
             <div className="mt-8 rounded-xl bg-black/40 p-6">
               <h2 className="text-2xl font-bold">
                 ATS Score 🎯
@@ -273,6 +338,28 @@ function ResumeAnalyzer() {
                )}
           </div>
        </div>
+      )}
+
+      {resumeText &&
+        suggestedProjects.length > 0 && (
+         <div className="mt-8 rounded-xl bg-black/40 p-6">
+          <h2 className="text-2xl font-bold">
+            Recommended Projects 💼
+         </h2>
+
+          <div className="mt-4 space-y-3">
+            {suggestedProjects.map(
+             (project) => (
+               <div
+                 key={project}
+                 className="rounded-lg bg-slate-900 p-4"
+                >
+                  📌 {project}
+               </div>
+              )
+            )}
+         </div>
+        </div>
       )}
 
         {resumeText && (
